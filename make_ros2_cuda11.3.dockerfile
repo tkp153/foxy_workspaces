@@ -71,6 +71,7 @@ RUN apt update \
     ros-foxy-ros-base\
     python3-colcon-common-extensions \
     python3-argcomplete \
+    python3-vcstool \
     rm -rf /var/lib/apt/lists/*
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
