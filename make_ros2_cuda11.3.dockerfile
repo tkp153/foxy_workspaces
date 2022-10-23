@@ -27,7 +27,9 @@ RUN apt  update -y \
     gnupg2\
     lsb-release\
     mesa-utils \
-    python3-pip
+    python3-pip\
+    software-properties-common \
+    rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update -y\
     && apt-get upgrade -y \
@@ -36,6 +38,7 @@ RUN apt-get update -y\
     libgl1-mesa-dev \
     libegl1-mesa-dev \
     libgles2-mesa-dev \
+    dirmngr \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3.8 /usr/bin/python
@@ -44,3 +47,32 @@ ENV PATH = "/usr/local/${CUDA_VERSION}/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/${CUDA_VERSION}/lib64:$LD_LIBRARY_PATH"
 
 # ROS INSTALL (FOXY)
+ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
+# setup timezone
+RUN echo 'Etc/UTC' > /etc/timezone && \
+    ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+    apt-get update && \
+    apt-get install -q -y --no-install-recommends tzdata && \
+    rm -rf /var/lib/apt/lists/*
+ENV LANG=en_US.UTF-8
+ENV LC_ALL C.UTF-8
+ENV ROS_DISTRO=foxy
+
+
+# setup sources.list
+RUN echo "deb http://packages.ros.org/ros2/ubuntu focal main" > /etc/apt/sources.list.d/ros2-latest.list
+# setup keys
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+
+RUN apt update \
+    apt upgrade \
+    spt install -y --no-install-recommends\
+    ros-foxy-desktop \
+    ros-foxy-ros-base\
+    python3-colcon-common-extensions \
+    python3-argcomplete \
+    rm -rf /var/lib/apt/lists/*
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+
+
+
