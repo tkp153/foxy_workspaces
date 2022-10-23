@@ -72,11 +72,26 @@ RUN apt update \
     python3-colcon-common-extensions \
     python3-argcomplete \
     python3-vcstool \
-    rm -rf /var/lib/apt/lists/*
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+    rm -rf /var/lib/apt/lists/* \
+    echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+
 RUN mkdir -p colcon_ws/src \
     && cd colcon_ws \
     colcon build
 
+RUN apt update \
+    apt install -y --no-install-recommends \
+    ros-foxy-gazebo-* \
+    ros-foxy-cartographer \
+    ros-foxy-cartographer-ros \
+    ros-foxy-navigation2 \
+    ros-foxy-nav2-bringup \
+    && source ~/.bashrc \
+    && apt install -y --no-install-recommends \
+    ros-foxy-dynamixel-sdk \
+    ros-foxy-turtlebot3* \
+    rm -rf /var/lib/apt/lists/*
 
+RUN echo 'export ROS_DOMAIN_ID=30 #TURTLEBOT3' >> ~/.bashrc \
+    && source ~/.bashrc
 
