@@ -15,6 +15,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 LABEL version "1.0"
 LABEL description " make a workspace for ros2 with openpifpaf"
 
+USER root 
+WORKDIR /home/tkp153_workDIR
+
 
 
 RUN apt  update -y \ 
@@ -47,6 +50,7 @@ RUN apt-get update -y\
     libglu1-mesa-dev \    
     curl \
     python3 \
+    sudo \
     python3-dev \
     ca-certificates \
     gdebi \
@@ -77,7 +81,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6
 
 RUN apt update \
     apt upgrade \
-    spt install -y --no-install-recommends\
+    apt install -y --no-install-recommends\
     ros-foxy-desktop \
     ros-foxy-ros-base\
     python3-colcon-common-extensions \
@@ -116,10 +120,13 @@ RUN apt install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 #setup kinect azure sdk
+
 RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
     && gdebi packages-microsoft-prod.deb \
     && apt install -y --no-install-recommends \
     k4a-tools \
+    libsoundio-dev\
+    libusb-1.0-* \
     rm -rf /var/lib/apt/lists/* 
 
 RUN git clone https://github.com/microsoft/Azure_Kinect_ROS_Driver.git \
@@ -131,3 +138,10 @@ RUN git clone https://github.com/microsoft/Azure_Kinect_ROS_Driver.git \
 RUN cd Azure_Kinect_ROS_Driver/build \
     && make
 
+# install openpifpaf module
+RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+COPY requirements.txt ${PWD}
+RUN pip3 install -r requirements.txt \
+    && mkdir tools \
+    && cd tools \
+    && git clone https://github.com/openpifpaf/openpifpaf.git

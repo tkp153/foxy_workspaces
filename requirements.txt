@@ -1,0 +1,3 @@
+openpifpaf
+pillow == 9.2.0
+opencv-python
