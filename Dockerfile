@@ -32,7 +32,7 @@ RUN apt  update -y \
     mesa-utils \
     python3-pip\
     software-properties-common \
-    rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update -y\
     && apt-get upgrade -y \
@@ -43,7 +43,7 @@ RUN apt-get update -y\
     libgles2-mesa-dev \
     dirmngr \
     libssl-dev \
-    libusb-1.0-0-dev \
+    libusb-1.0-0-*\
     pkg-config \
     libgtk-3-dev \
     libglfw3-dev \
@@ -64,30 +64,32 @@ ENV LD_LIBRARY_PATH="/usr/local/${CUDA_VERSION}/lib64:$LD_LIBRARY_PATH"
 # ROS INSTALL (FOXY)
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 # setup timezone
-RUN echo 'Etc/UTC' > /etc/timezone && \
-    ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
-    apt-get update && \
-    apt-get install -q -y --no-install-recommends tzdata && \
-    rm -rf /var/lib/apt/lists/*
+RUN locale
+RUN apt update \
+    && apt-get install -y --no-install-recommends \
+    locales \
+    && locale-gen en_US.UTF-8 
+
+ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL C.UTF-8
 ENV ROS_DISTRO=foxy
 
 
 # setup sources.list
-RUN echo "deb http://packages.ros.org/ros2/ubuntu focal main" > /etc/apt/sources.list.d/ros2-latest.list
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 # setup keys
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-RUN apt update \
-    apt upgrade \
-    apt install -y --no-install-recommends\
+RUN apt update -y \
+    && apt upgrade -y \
+    && apt install -y --no-install-recommends\
     ros-foxy-desktop \
     ros-foxy-ros-base\
     python3-colcon-common-extensions \
     python3-argcomplete \
     python3-vcstool \
-    rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/* \
     echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
 RUN mkdir -p colcon_ws/src \
@@ -96,20 +98,25 @@ RUN mkdir -p colcon_ws/src \
     
 # setup turtlebot3_pkgs
 RUN apt update \
-    apt install -y --no-install-recommends \
+    && apt install -y --no-install-recommends \
     ros-foxy-gazebo-* \
     ros-foxy-cartographer \
     ros-foxy-cartographer-ros \
     ros-foxy-navigation2 \
     ros-foxy-nav2-bringup \
-    && source ~/.bashrc \
+    && rm -rf /var/lib/apt/lists/*
+RUN rm /bin/sh \
+    && ln -s /bin/bash /bin/sh \
+    && apt update -y \
+    && apt upgrade -y\
     && apt install -y --no-install-recommends \
     ros-foxy-dynamixel-sdk \
     ros-foxy-turtlebot3* \
-    rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 RUN echo 'export ROS_DOMAIN_ID=30 #TURTLEBOT3' >> ~/.bashrc \
-    && source ~/.bashrc
+    && rm /bin/sh \
+    && ln -s /bin/bash /bin/sh
 
 # setup realsense sdk
 RUN echo 'export http_proxy="http://<proxy>:<port>" '
@@ -117,17 +124,16 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A0
 RUN add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
 RUN apt install -y --no-install-recommends \
     librealsense2* \
-    rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 #setup kinect azure sdk
 
 RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && gdebi packages-microsoft-prod.deb \
-    && apt install -y --no-install-recommends \
-    k4a-tools \
-    libsoundio-dev\
-    libusb-1.0-* \
-    rm -rf /var/lib/apt/lists/* 
+    && dpkg -i /home/tkp153_workDIR/packages-microsoft-prod.deb \
+    && apt update -y \
+    && apt upgrade -y\
+    && ACCEPT_EULA=Y apt install -y k4a-tools \
+    && rm -rf /var/lib/apt/lists/* 
 
 RUN git clone https://github.com/microsoft/Azure_Kinect_ROS_Driver.git \
     && cd Azure_Kinect_ROS_Driver \
