@@ -15,8 +15,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 LABEL version "1.0"
 LABEL description " make a workspace for ros2 with openpifpaf"
 
-USER root 
-WORKDIR /home/tkp153_workDIR
+USER root
+WORKDIR /home
 
 
 
@@ -51,6 +51,7 @@ RUN apt-get update -y\
     curl \
     python3 \
     sudo \
+    nano \
     python3-dev \
     ca-certificates \
     gdebi \
@@ -89,12 +90,18 @@ RUN apt update -y \
     python3-colcon-common-extensions \
     python3-argcomplete \
     python3-vcstool \
-    && rm -rf /var/lib/apt/lists/* \
-    echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+    libbullet-dev \
+    python3-flake8 \
+    python3-rosdep \
+    python3-vcstool \
+    && rm -rf /var/lib/apt/lists/* 
+
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
 RUN mkdir -p colcon_ws/src \
     && cd colcon_ws \
-    colcon build
+    && colcon build\
+    && echo "source /install/local_setup.bash" >> ~/.bashrc
     
 # setup turtlebot3_pkgs
 RUN apt update \
@@ -104,6 +111,7 @@ RUN apt update \
     ros-foxy-cartographer-ros \
     ros-foxy-navigation2 \
     ros-foxy-nav2-bringup \
+    ros-foxy-rviz2\
     && rm -rf /var/lib/apt/lists/*
 RUN rm /bin/sh \
     && ln -s /bin/bash /bin/sh \
@@ -129,7 +137,7 @@ RUN apt install -y --no-install-recommends \
 #setup kinect azure sdk
 
 RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && dpkg -i /home/tkp153_workDIR/packages-microsoft-prod.deb \
+    && dpkg -i /home/packages-microsoft-prod.deb \
     && apt update -y \
     && apt upgrade -y\
     && ACCEPT_EULA=Y apt install -y k4a-tools \
@@ -138,7 +146,10 @@ RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-p
 RUN git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git 
 RUN apt update -y && apt upgrade -y \
     && apt install -y --no-install-recommends \
-    libsoundio-dev
+    libsoundio-dev \
+    python3-tk\
+    tk-dev\
+    && rm -rf /var/lib/apt/lists/*
 
 RUN cd Azure-Kinect-Sensor-SDK \
     && mkdir build \
@@ -156,5 +167,3 @@ RUN pip3 install -r requirements.txt \
     && cd tools \
     && git clone https://github.com/openpifpaf/openpifpaf.git
 
-WORKDIR /home
-RUN mkdir workfolder
