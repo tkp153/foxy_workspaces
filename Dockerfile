@@ -16,7 +16,7 @@ LABEL version "1.0"
 LABEL description " make a workspace for ros2 with openpifpaf"
 
 USER root
-WORKDIR /home
+WORKDIR /root
 
 
 
@@ -101,7 +101,9 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 RUN mkdir -p colcon_ws/src \
     && cd colcon_ws \
     && colcon build\
-    && echo "source /install/local_setup.bash" >> ~/.bashrc
+    && rosdep init \
+    && rosdep update \
+    && echo "source ~/colcon_ws/install/local_setup.bash" >> ~/.bashrc
     
 # setup turtlebot3_pkgs
 RUN apt update \
