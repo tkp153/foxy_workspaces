@@ -139,7 +139,7 @@ RUN apt install -y --no-install-recommends \
 #setup kinect azure sdk
 
 RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && dpkg -i /home/packages-microsoft-prod.deb \
+    && dpkg -i /root/packages-microsoft-prod.deb \
     && apt update -y \
     && apt upgrade -y\
     && ACCEPT_EULA=Y apt install -y k4a-tools \
