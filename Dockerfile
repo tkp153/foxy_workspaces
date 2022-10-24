@@ -155,3 +155,6 @@ RUN pip3 install -r requirements.txt \
     && mkdir tools \
     && cd tools \
     && git clone https://github.com/openpifpaf/openpifpaf.git
+
+WORKDIR /home
+RUN mkdir workfolder
