@@ -135,13 +135,17 @@ RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-p
     && ACCEPT_EULA=Y apt install -y k4a-tools \
     && rm -rf /var/lib/apt/lists/* 
 
-RUN git clone https://github.com/microsoft/Azure_Kinect_ROS_Driver.git \
-    && cd Azure_Kinect_ROS_Driver \
+RUN git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git 
+RUN apt update -y && apt upgrade -y \
+    && apt install -y --no-install-recommends \
+    libsoundio-dev
+
+RUN cd Azure-Kinect-Sensor-SDK \
     && mkdir build \
     && cd build \
     && cmake ..
 
-RUN cd Azure_Kinect_ROS_Driver/build \
+RUN cd Azure-Kinect-Sensor-SDK/build \
     && make
 
 # install openpifpaf module
