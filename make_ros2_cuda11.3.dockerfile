@@ -49,6 +49,7 @@ RUN apt-get update -y\
     python3 \
     python3-dev \
     ca-certificates \
+    gdebi \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3.8 /usr/bin/python
@@ -115,3 +116,18 @@ RUN apt install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 #setup kinect azure sdk
+RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && gdebi packages-microsoft-prod.deb \
+    && apt install -y --no-install-recommends \
+    k4a-tools \
+    rm -rf /var/lib/apt/lists/* 
+
+RUN git clone https://github.com/microsoft/Azure_Kinect_ROS_Driver.git \
+    && cd Azure_Kinect_ROS_Driver \
+    && mkdir build \
+    && cd build \
+    && cmake ..
+
+RUN cd Azure_Kinect_ROS_Driver/build \
+    && make
+
