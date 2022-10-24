@@ -39,6 +39,16 @@ RUN apt-get update -y\
     libegl1-mesa-dev \
     libgles2-mesa-dev \
     dirmngr \
+    libssl-dev \
+    libusb-1.0-0-dev \
+    pkg-config \
+    libgtk-3-dev \
+    libglfw3-dev \
+    libglu1-mesa-dev \    
+    curl \
+    python3 \
+    python3-dev \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3.8 /usr/bin/python
@@ -78,7 +88,8 @@ RUN apt update \
 RUN mkdir -p colcon_ws/src \
     && cd colcon_ws \
     colcon build
-
+    
+# setup turtlebot3_pkgs
 RUN apt update \
     apt install -y --no-install-recommends \
     ros-foxy-gazebo-* \
@@ -95,3 +106,12 @@ RUN apt update \
 RUN echo 'export ROS_DOMAIN_ID=30 #TURTLEBOT3' >> ~/.bashrc \
     && source ~/.bashrc
 
+# setup realsense sdk
+RUN echo 'export http_proxy="http://<proxy>:<port>" '
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
+RUN add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
+RUN apt install -y --no-install-recommends \
+    librealsense2* \
+    rm -rf /var/lib/apt/lists/*
+
+#setup kinect azure sdk
