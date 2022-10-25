@@ -1,5 +1,5 @@
 # ros2_cuda11.3_workspaces
-##Minimum environment 
+## Minimum environment 
 In this package we need this specs and packages on your host machine
 - nvidia gpu
 - nvidia drivers
@@ -8,7 +8,7 @@ In this package we need this specs and packages on your host machine
 - Docker
 
 
-##How to use this package
+## How to use this package
 
  1. clone this
   ```
@@ -44,6 +44,6 @@ The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 - gedbi
 
 ## Docker Image information
-> Image Size: 21.1 GB
-> Build Time: Approx: 30min ~ 1hour (Depends on communication speed)
+> Image Size: 21.1 GB<br>
+> Build Time: Approx: 30min ~ 1hour (Depends on communication speed)<br>
 > X11_server: True
