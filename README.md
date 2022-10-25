@@ -2,6 +2,7 @@
 ## Minimum environment 
 In this package we need this specs and packages on your host machine
 - nvidia gpu
+- AMD64 CPU 
 - nvidia drivers
 - x11(X Windows System ver.11 )
 - NVIDIA container toolkit
@@ -27,7 +28,8 @@ In this package we need this specs and packages on your host machine
   ```
 
 ## What modules are included
-The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***.And this package , I customized it from this.The package included modules are shown a list below.
+The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***.And this package , I customized it from this. Included modules in this dockerfiles
+ are shown a list below.
 ### Main modules
 - Ros2 (Foxy)
 - Azure Kinect Sensor SDK(Already build)
