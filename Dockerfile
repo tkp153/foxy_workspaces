@@ -148,3 +148,6 @@ RUN pip3 install -r requirements.txt \
     && cd tools \
     && git clone https://github.com/openpifpaf/openpifpaf.git
 
+RUN git clone https://github.com/tkp153/openpifpaf_ros2.git
+
+
