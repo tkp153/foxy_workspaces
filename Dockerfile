@@ -55,6 +55,7 @@ RUN apt-get update -y\
     python3-dev \
     ca-certificates \
     gdebi \
+    pcmanfm\
     && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3.8 /usr/bin/python
@@ -143,17 +144,15 @@ RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-p
     && apt update -y \
     && apt upgrade -y\
     && ACCEPT_EULA=Y apt install -y k4a-tools \
-    && rm -rf /var/lib/apt/lists/* 
-
-RUN git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git 
-RUN apt update -y && apt upgrade -y \
+    && rm -rf /var/lib/apt/lists/* \ 
+    && git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git\
+    && apt update -y && apt upgrade -y \
     && apt install -y --no-install-recommends \
     libsoundio-dev \
     python3-tk\
     tk-dev\
-    && rm -rf /var/lib/apt/lists/*
-
-RUN cd Azure-Kinect-Sensor-SDK \
+    && rm -rf /var/lib/apt/lists/*\
+    && cd Azure-Kinect-Sensor-SDK \
     && mkdir build \
     && cd build \
     && cmake ..

@@ -6,6 +6,7 @@ In this package we need this specs and packages on your host machine
 - x11(X Windows System ver.11 )
 - NVIDIA container toolkit
 - Docker
+- AMD64 CPU
 
 
 ##How to use this package
@@ -27,7 +28,7 @@ In this package we need this specs and packages on your host machine
   ```
 
 ## What modules are included
-The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***.And this package , I customized it from this.The package included modules are shown a list below.
+The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***.And this package , I customized it from this.The modules included in this packages are shown a list below.
 ### Main modules
 - Ros2 (Foxy)
 - Azure Kinect Sensor SDK(Already build)
@@ -42,8 +43,9 @@ The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 - nano
 - gazebo11
 - gedbi
+- pcmanfm
 
 ## Docker Image information
 > Image Size: 21.1 GB
-> Build Time: Approx: 30min ~ 1hour (Depends on communication speed)
+> Build Time: Approx: 30min(Depends on communication speed)
 > X11_server: True
