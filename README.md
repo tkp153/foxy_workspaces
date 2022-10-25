@@ -1,7 +1,8 @@
 # ros2_cuda11.3_workspaces
-##Minimum environment 
+## Minimum environment 
 In this package we need this specs and packages on your host machine
 - nvidia gpu
+- AMD64 CPU 
 - nvidia drivers
 - x11(X Windows System ver.11 )
 - NVIDIA container toolkit
@@ -9,7 +10,7 @@ In this package we need this specs and packages on your host machine
 - AMD64 CPU
 
 
-##How to use this package
+## How to use this package
 
  1. clone this
   ```
