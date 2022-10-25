@@ -95,6 +95,9 @@ RUN apt update -y \
     python3-flake8 \
     python3-rosdep \
     python3-vcstool \
+    libsoundio-dev \
+    python3-tk\
+    tk-dev\
     && rm -rf /var/lib/apt/lists/* 
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
@@ -136,29 +139,6 @@ RUN add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb
 RUN apt install -y --no-install-recommends \
     librealsense2* \
     && rm -rf /var/lib/apt/lists/*
-
-#setup kinect azure sdk
-
-RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && dpkg -i /root/packages-microsoft-prod.deb \
-    && apt update -y \
-    && apt upgrade -y\
-    && ACCEPT_EULA=Y apt install -y k4a-tools \
-    && rm -rf /var/lib/apt/lists/* \ 
-    && git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git\
-    && apt update -y && apt upgrade -y \
-    && apt install -y --no-install-recommends \
-    libsoundio-dev \
-    python3-tk\
-    tk-dev\
-    && rm -rf /var/lib/apt/lists/*\
-    && cd Azure-Kinect-Sensor-SDK \
-    && mkdir build \
-    && cd build \
-    && cmake ..
-
-RUN cd Azure-Kinect-Sensor-SDK/build \
-    && make
 
 # install openpifpaf module
 RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
