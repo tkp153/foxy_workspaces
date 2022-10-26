@@ -12,13 +12,14 @@ ENV NVIDIA_DRIVERS_CAPABILITIES=all
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-LABEL version "1.0"
-LABEL description " make a workspace for ros2 with openpifpaf"
-
-USER root
-WORKDIR /root
-
-
+ARG USERNAME=user
+ARG GROUPNAME=user
+ARG UID=1000
+ARG GID=1000
+RUN groupadd -g $GID $GROUPNAME && \
+    useradd -m -s /bin/bash -u $UID -g $GID $USERNAME
+USER $USERNAME
+WORKDIR /home/$USERNAME/
 
 RUN apt  update -y \ 
     && apt-get upgrade -y \
@@ -149,5 +150,13 @@ RUN pip3 install -r requirements.txt \
     && git clone https://github.com/openpifpaf/openpifpaf.git
 
 RUN git clone https://github.com/tkp153/openpifpaf_ros2.git
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
+    && install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ \
+    && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list' \
+    && apt update -y \
+    && apt-get install apt-transport-https \
+    apt-get update \
+    && apt-get install code 
+
 
 
