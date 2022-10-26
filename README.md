@@ -47,6 +47,6 @@ The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 - pcmanfm
 
 ## Docker Image information
-> Image Size: 21.1 GB
+> Image Size: 21.8 GB
 > Build Time: Approx: 30min(Depends on communication speed)
 > X11_server: True
