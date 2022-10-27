@@ -53,7 +53,7 @@ RUN  apt-get update -y\
     libglu1-mesa-dev \    
     curl \
     python3 \
-     \
+    sudo\
     nano \
     python3-dev \
     ca-certificates \
