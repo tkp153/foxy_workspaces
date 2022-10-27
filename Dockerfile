@@ -17,7 +17,7 @@ ENV GID=1000
 ENV UID=1000
 
 RUN groupadd -g $GID -o $UNAME
-RUN useradd -m -u $UID -g $GID -G  -o -s /bin/bash $UNAME
+RUN useradd -m -u $UID -g $GID -G sudo -o -s /bin/bash $UNAME
 RUN echo "$UNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/ers
 RUN echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/ers
 
