@@ -34,7 +34,7 @@ The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 - Ros2 (Foxy)
 - ~~Azure Kinect Sensor SDK(Already build)~~ (Remove)
 - Intel RealSense SDK 2.0
-- openpifpaf(Already check to move this package in docker contains)
+- openpifpaf
 - Cuda 11.3
 - Pytorch 1.12.1 with cuda (included torch vision and torchaudio) 
 - opencv
