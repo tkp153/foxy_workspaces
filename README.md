@@ -65,4 +65,4 @@ The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this
 ## Version information
 > 1.0 <br>first release
 
-> 2.0 (2022/10/27)<br>add terminator and vscode and local user in ubuntu 20.04 LTS
+> 2.0 (2022/10/27)<br>add terminator
