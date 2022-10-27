@@ -29,7 +29,7 @@ In this package we need this specs and packages on your host machine
   ```
 
 ## What modules are included
-The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***.And this package , I customized it from this.The modules included in this packages are shown a list below.
+The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this Doclerfile are included these packages which are shown a list below.
 ### Main modules
 - Ros2 (Foxy)
 - ~~Azure Kinect Sensor SDK(Already build)~~ (Remove)
@@ -49,7 +49,7 @@ The base docker image contains is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 - vscode (v.2 add)
 
 ## Docker Image information
-> Image Size: 21.8 GB
+> Image Size: 22.8 GB (version:1 21.8 GB)
 > Build Time: Approx: 30min(Depends on communication speed)
 > X11_server: True
 
