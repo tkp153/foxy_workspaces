@@ -12,18 +12,20 @@ ENV NVIDIA_DRIVERS_CAPABILITIES=all
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-ARG USERNAME=user
-ARG GROUPNAME=user
-ARG UID=1000
-ARG GID=1000
-RUN groupadd -g $GID $GROUPNAME && \
-    useradd -m -s /bin/bash -u $UID -g $GID $USERNAME
-USER $USERNAME
-WORKDIR /home/$USERNAME/
+ENV UNAME=docker
+ENV GID=1000
+ENV UID=1000
 
-RUN apt  update -y \ 
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends\
+RUN groupadd -g $GID -o $UNAME
+RUN useradd -m -u $UID -g $GID -G sudo -o -s /bin/bash $UNAME
+RUN echo "$UNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+WORKDIR /home/$UNAME/
+
+RUN sudo apt update -y \ 
+    && sudo apt-get upgrade -y \
+    && sudo apt-get install -y --no-install-recommends\
     git \
     vim \
     curl \
@@ -35,9 +37,9 @@ RUN apt  update -y \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update -y\
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends\
+RUN sudo apt-get update -y\
+    && sudo apt-get upgrade -y \
+    && sudo apt-get install -y --no-install-recommends\
     libglvnd-dev libglvnd-dev\
     libgl1-mesa-dev \
     libegl1-mesa-dev \
@@ -68,8 +70,8 @@ ENV LD_LIBRARY_PATH="/usr/local/${CUDA_VERSION}/lib64:$LD_LIBRARY_PATH"
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 # setup timezone
 RUN locale
-RUN apt update \
-    && apt-get install -y --no-install-recommends \
+RUN sudo apt update \
+    && sudo apt-get install -y --no-install-recommends \
     locales \
     && locale-gen en_US.UTF-8 
 
@@ -84,9 +86,9 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o 
 # setup keys
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-RUN apt update -y \
-    && apt upgrade -y \
-    && apt install -y --no-install-recommends\
+RUN sudo apt update -y \
+    && sudo apt upgrade -y \
+    && sudo apt install -y --no-install-recommends\
     ros-foxy-desktop \
     ros-foxy-ros-base\
     python3-colcon-common-extensions \
@@ -111,8 +113,8 @@ RUN mkdir -p colcon_ws/src \
     && echo "source ~/colcon_ws/install/local_setup.bash" >> ~/.bashrc
     
 # setup turtlebot3_pkgs
-RUN apt update \
-    && apt install -y --no-install-recommends \
+RUN sudo apt update \
+    && sudo apt install -y --no-install-recommends \
     ros-foxy-gazebo-* \
     ros-foxy-cartographer \
     ros-foxy-cartographer-ros \
@@ -122,9 +124,9 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/*
 RUN rm /bin/sh \
     && ln -s /bin/bash /bin/sh \
-    && apt update -y \
-    && apt upgrade -y\
-    && apt install -y --no-install-recommends \
+    && sudo apt update -y \
+    && sudo apt upgrade -y\
+    && sudo apt install -y --no-install-recommends \
     ros-foxy-dynamixel-sdk \
     ros-foxy-turtlebot3* \
     && rm -rf /var/lib/apt/lists/*
@@ -135,9 +137,9 @@ RUN echo 'export ROS_DOMAIN_ID=30 #TURTLEBOT3' >> ~/.bashrc \
 
 # setup realsense sdk
 RUN echo 'export http_proxy="http://<proxy>:<port>" '
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-RUN add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
-RUN apt install -y --no-install-recommends \
+RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
+RUN sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
+RUN sudo apt install -y --no-install-recommends \
     librealsense2* \
     && rm -rf /var/lib/apt/lists/*
 
@@ -151,12 +153,16 @@ RUN pip3 install -r requirements.txt \
 
 RUN git clone https://github.com/tkp153/openpifpaf_ros2.git
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
-    && install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ \
-    && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list' \
-    && apt update -y \
-    && apt-get install apt-transport-https \
-    apt-get update \
-    && apt-get install code 
+    && sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ \
+    && sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list' \
+    && sudo apt update -y \
+    && sudo apt-get install apt-transport-https \
+    && sudo apt-get update \
+    && sudo apt-get install -y code 
+
+RUN sudo add-apt-repository ppa:mattrose/terminator \
+    && sudo apt update -y \
+    && sudo apt install -y terminator
 
 
 
