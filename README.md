@@ -27,15 +27,7 @@ In this package we need this specs and packages on your host machine
   chmod +x docker_run.bash
   ./docker_run.bash
   ```
-  4．change user
-  if you are default setting
-  ```
-  su - docker
-  ```
-   if you change your name
-  ```
-  su - ${USER_NAME}
-  ```
+
 
 ## What modules are included
 The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this Doclerfile are included these packages which are shown a list below.
@@ -55,7 +47,6 @@ The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this
 - gedbi
 - pcmanfm
 - terminator (v.2 add)
-- vscode (v.2 add)
 
 ## Docker Image information
 > Image Size: 22.8 GB (version:1 21.8 GB)
