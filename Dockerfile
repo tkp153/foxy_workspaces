@@ -146,7 +146,16 @@ RUN git clone https://github.com/tkp153/openpifpaf_ros2.git
 
 RUN  add-apt-repository ppa:mattrose/terminator \
     &&  apt update -y \
-    &&  apt install -y terminator
+    &&  apt install -y terminator\
+    && rm -rf /var/lib/apt/lists/*
 
+RUN cd tools \
+    && git clone https://github.com/wmuron/motpy \
+    && cd motpy \
+    && make install-develop \
+    && make test 
 
-
+RUN cd tools \
+    && git clone https://github.com/Megvii-BaseDetection/YOLOX.git \
+    && cd YOLOX \
+    && pip3 install -v -e .
