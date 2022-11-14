@@ -82,6 +82,7 @@ RUN  apt update -y \
     &&  apt install -y --no-install-recommends\
     ros-foxy-desktop \
     ros-foxy-ros-base\
+    ros-foxy-v4l2-camera\
     python3-colcon-common-extensions \
     python3-argcomplete \
     python3-vcstool \
