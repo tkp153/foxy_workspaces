@@ -1,4 +1,6 @@
-openpifpaf
+openpifpaf==0.13.6
 pillow == 9.2.0
 opencv-python
 open3d
+pybboxes
+numpy

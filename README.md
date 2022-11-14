@@ -35,10 +35,12 @@ The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this
 - Ros2 (Foxy)
 - ~~Azure Kinect Sensor SDK(Already build)~~ (Remove)
 - Intel RealSense SDK 2.0
-- openpifpaf
+- openpifpaf -> version 0.13.6
 - Cuda 11.3
 - Pytorch 1.12.1 with cuda (included torch vision and torchaudio) 
 - opencv
+- ~~motpy~~ <br> remove
+- ~~yolox~~ <br> remove
 ### Sub modules
 - TurtleBot3 packages (Foxy version)
   - Maybe all packages for TurtleBot3 
@@ -57,3 +59,6 @@ The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this
 > 1.0 <br>first release
 
 > 2.0 (2022/10/27)<br>add terminator
+
+> 2.01 (2022/11/11) <br> add YOLOX,motpy
+>2.02 (2022/11/14) <br> remove Yolox and MOTPY lock openpifpaf version to 0.13.6
