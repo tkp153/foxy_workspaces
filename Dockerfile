@@ -134,13 +134,10 @@ RUN  apt install -y --no-install-recommends \
     librealsense2* \
     && rm -rf /var/lib/apt/lists/*
 
-# install openpifpaf module
-RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
 COPY requirements.txt ${PWD}
 RUN pip3 install -r requirements.txt \
     && mkdir tools \
-    && cd tools \
-    && git clone https://github.com/openpifpaf/openpifpaf.git
+    && cd tools 
 
 RUN git clone https://github.com/tkp153/openpifpaf_ros2.git
 
@@ -150,12 +147,3 @@ RUN  add-apt-repository ppa:mattrose/terminator \
     && rm -rf /var/lib/apt/lists/*
 
 RUN cd tools \
-    && git clone https://github.com/wmuron/motpy \
-    && cd motpy \
-    && make install-develop \
-    && make test 
-
-RUN cd tools \
-    && git clone https://github.com/Megvii-BaseDetection/YOLOX.git \
-    && cd YOLOX \
-    && pip3 install -v -e .
