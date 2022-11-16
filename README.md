@@ -65,4 +65,10 @@ The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this
 >2.02 (2022/11/14) <br> remove Yolox and MOTPY lock openpifpaf version to 0.13.6
 
 >2.03 (2022/11/14) <br>
-- add v4l2_camera_node
+
+> - add v4l2_camera_node
+
+> - reduce file size
+
+>2.04(2022/11/16) <br> add cuda 11.6 version dockerfile add restore Kinect Azure SDK
+
