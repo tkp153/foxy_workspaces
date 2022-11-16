@@ -1,6 +1,6 @@
-FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.6.0-cudnn8-devel-ubuntu20.04
 
-ARG CUDA_VERSION=cuda-11.3
+ARG CUDA_VERSION=cuda-11.6
 ARG PYTHON_VERSION=python3
 ARG TZ=Asia/Tokyo
 
@@ -12,21 +12,11 @@ ENV NVIDIA_DRIVERS_CAPABILITIES=all
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-ARG USERNAME=user
-ARG GROUPNAME=user
-ARG UID=1000
-ARG GID=1000
-ARG PASSWORD=user
-RUN groupadd -g $GID $GROUPNAME && \
-    useradd -m -s /bin/bash -u $UID -g $GID -G sudo $USERNAME && \
-    echo $USERNAME:$PASSWORD | chpasswd && \
-    echo "$USERNAME   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-USER $USERNAME
-WORKDIR /home/$USERNAME/
+WORKDIR /root
 
-RUN apt  update -y \ 
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends\
+RUN  apt update -y \ 
+    &&  apt-get upgrade -y \
+    &&  apt-get install -y --no-install-recommends\
     git \
     vim \
     curl \
@@ -38,9 +28,9 @@ RUN apt  update -y \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update -y\
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends\
+RUN  apt-get update -y\
+    &&  apt-get upgrade -y \
+    &&  apt-get install -y --no-install-recommends\
     libglvnd-dev libglvnd-dev\
     libgl1-mesa-dev \
     libegl1-mesa-dev \
@@ -54,7 +44,7 @@ RUN apt-get update -y\
     libglu1-mesa-dev \    
     curl \
     python3 \
-    sudo \
+    sudo\
     nano \
     python3-dev \
     ca-certificates \
@@ -71,8 +61,8 @@ ENV LD_LIBRARY_PATH="/usr/local/${CUDA_VERSION}/lib64:$LD_LIBRARY_PATH"
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 # setup timezone
 RUN locale
-RUN apt update \
-    && apt-get install -y --no-install-recommends \
+RUN  apt update \
+    &&  apt-get install -y --no-install-recommends \
     locales \
     && locale-gen en_US.UTF-8 
 
@@ -85,13 +75,14 @@ ENV ROS_DISTRO=foxy
 # setup sources.list
 RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 # setup keys
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" |  tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-RUN apt update -y \
-    && apt upgrade -y \
-    && apt install -y --no-install-recommends\
+RUN  apt update -y \
+    &&  apt upgrade -y \
+    &&  apt install -y --no-install-recommends\
     ros-foxy-desktop \
     ros-foxy-ros-base\
+    ros-foxy-v4l2-camera\
     python3-colcon-common-extensions \
     python3-argcomplete \
     python3-vcstool \
@@ -99,6 +90,9 @@ RUN apt update -y \
     python3-flake8 \
     python3-rosdep \
     python3-vcstool \
+    libsoundio-dev \
+    python3-tk\
+    tk-dev\
     && rm -rf /var/lib/apt/lists/* 
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
@@ -111,8 +105,8 @@ RUN mkdir -p colcon_ws/src \
     && echo "source ~/colcon_ws/install/local_setup.bash" >> ~/.bashrc
     
 # setup turtlebot3_pkgs
-RUN apt update \
-    && apt install -y --no-install-recommends \
+RUN  apt update \
+    &&  apt install -y --no-install-recommends \
     ros-foxy-gazebo-* \
     ros-foxy-cartographer \
     ros-foxy-cartographer-ros \
@@ -122,9 +116,9 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/*
 RUN rm /bin/sh \
     && ln -s /bin/bash /bin/sh \
-    && apt update -y \
-    && apt upgrade -y\
-    && apt install -y --no-install-recommends \
+    &&  apt update -y \
+    &&  apt upgrade -y\
+    &&  apt install -y --no-install-recommends \
     ros-foxy-dynamixel-sdk \
     ros-foxy-turtlebot3* \
     && rm -rf /var/lib/apt/lists/*
@@ -135,11 +129,24 @@ RUN echo 'export ROS_DOMAIN_ID=30 #TURTLEBOT3' >> ~/.bashrc \
 
 # setup realsense sdk
 RUN echo 'export http_proxy="http://<proxy>:<port>" '
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-RUN add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
-RUN apt install -y --no-install-recommends \
+RUN  apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE ||  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
+RUN  add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
+RUN  apt install -y --no-install-recommends \
     librealsense2* \
     && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt ${PWD}
+RUN pip3 install -r requirements.txt \
+    && mkdir tools \
+    && cd tools 
+
+RUN git clone https://github.com/tkp153/openpifpaf_ros2.git
+
+RUN  add-apt-repository ppa:mattrose/terminator \
+    &&  apt update -y \
+    &&  apt install -y terminator\
+    && rm -rf /var/lib/apt/lists/*
+
 
 #setup kinect azure sdk
 
@@ -148,6 +155,7 @@ RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-p
     && apt update -y \
     && apt upgrade -y\
     && ACCEPT_EULA=Y apt install -y k4a-tools \
+    && apt install -y libk4a1.4-dev\
     && rm -rf /var/lib/apt/lists/* \ 
     && git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git\
     && apt update -y && apt upgrade -y \
@@ -157,18 +165,14 @@ RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-p
     tk-dev\
     && rm -rf /var/lib/apt/lists/*\
     && cd Azure-Kinect-Sensor-SDK \
+    && git checkout origin/release/1.4.x \
     && mkdir build \
     && cd build \
     && cmake ..
 
 RUN cd Azure-Kinect-Sensor-SDK/build \
     && make
-
-# install openpifpaf module
-RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
-COPY requirements.txt ${PWD}
-RUN pip3 install -r requirements.txt \
-    && mkdir tools \
-    && cd tools \
-    && git clone https://github.com/openpifpaf/openpifpaf.git
+RUN git clone https://github.com/microsoft/Azure_Kinect_ROS_Driver.git \
+&& cd Azure_Kinect_ROS_Driver \
+&& git checkout foxy-devel
 
