@@ -30,10 +30,10 @@ In this package we need this specs and packages on your host machine
 
 
 ## What modules are included
-The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this Doclerfile are included these packages which are shown a list below.
+The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04(cu113) and nvidia/cuda:11.6.0-cudnn8-devel-ubuntu20.04(cu116)***. this Doclerfile are included these packages which are shown a list below.
 ### Main modules
 - Ros2 (Foxy)
-- ~~Azure Kinect Sensor SDK(Already build)~~ (Remove)
+- Azure Kinect Sensor SDK(Already build)
 - Intel RealSense SDK 2.0
 - openpifpaf -> version 0.13.6
 - Cuda 11.3
@@ -51,7 +51,7 @@ The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this
 - terminator (v.2 add)
 
 ## Docker Image information
-> Image Size: 22.8 GB (version:1 21.8 GB)
+> Image Size: 22.2 GB (version:1 21.8 GB)
 > Build Time: Approx: 30min(Depends on communication speed)
 > X11_server: True
 
@@ -62,4 +62,13 @@ The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04***. this
 
 > 2.01 (2022/11/11) <br> add YOLOX,motpy
 
-> 2.02 (2022/11/14) <br> remove Yolox and MOTPY lock openpifpaf version to 0.13.6
+>2.02 (2022/11/14) <br> remove Yolox and MOTPY lock openpifpaf version to 0.13.6
+
+>2.03 (2022/11/14) <br>
+
+> - add v4l2_camera_node
+
+> - reduce file size
+
+>2.04(2022/11/16) <br> 1.add cuda 11.6 version dockerfile <br> 2.restore Kinect Azure SDK<br>3. reduce image size
+

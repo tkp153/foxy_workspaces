@@ -82,6 +82,7 @@ RUN  apt update -y \
     &&  apt install -y --no-install-recommends\
     ros-foxy-desktop \
     ros-foxy-ros-base\
+    ros-foxy-v4l2-camera\
     python3-colcon-common-extensions \
     python3-argcomplete \
     python3-vcstool \
@@ -146,4 +147,32 @@ RUN  add-apt-repository ppa:mattrose/terminator \
     &&  apt install -y terminator\
     && rm -rf /var/lib/apt/lists/*
 
-RUN cd tools \
+
+#setup kinect azure sdk
+
+RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && dpkg -i /root/packages-microsoft-prod.deb \
+    && apt update -y \
+    && apt upgrade -y\
+    && ACCEPT_EULA=Y apt install -y k4a-tools \
+    && apt install -y libk4a1.4-dev \
+    && rm -rf /var/lib/apt/lists/* \ 
+    && git clone https://github.com/microsoft/Azure-Kinect-Sensor-SDK.git\
+    && apt update -y && apt upgrade -y \
+    && apt install -y --no-install-recommends \
+    libsoundio-dev \
+    python3-tk\
+    tk-dev\
+    && rm -rf /var/lib/apt/lists/*\
+    && cd Azure-Kinect-Sensor-SDK \
+    && git checkout origin/release/1.4.x \
+    && mkdir build \
+    && cd build \
+    && cmake ..
+
+RUN cd Azure-Kinect-Sensor-SDK/build \
+    && make
+RUN git clone https://github.com/microsoft/Azure_Kinect_ROS_Driver.git \
+&& cd Azure_Kinect_ROS_Driver \
+&& git checkout foxy-devel
+
