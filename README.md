@@ -1,4 +1,4 @@
-# ros2_cuda11.3_workspaces
+# ros2_cuda_workspaces
 ## Minimum environment 
 In this package we need this specs and packages on your host machine
 - nvidia gpu
