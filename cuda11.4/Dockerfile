@@ -12,29 +12,12 @@ ENV NVIDIA_DRIVERS_CAPABILITIES=all
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-<<<<<<< HEAD:cuda11.4/Dockerfile
+
 WORKDIR /root
 
 RUN  apt update -y \ 
     &&  apt-get upgrade -y \
     &&  apt-get install -y --no-install-recommends\
-=======
-ARG USERNAME=user
-ARG GROUPNAME=user
-ARG UID=1000
-ARG GID=1000
-ARG PASSWORD=user
-RUN groupadd -g $GID $GROUPNAME && \
-    useradd -m -s /bin/bash -u $UID -g $GID -G sudo $USERNAME && \
-    echo $USERNAME:$PASSWORD | chpasswd && \
-    echo "$USERNAME   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-USER $USERNAME
-WORKDIR /home/$USERNAME/
-
-RUN apt  update -y \ 
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends\
->>>>>>> master:Dockerfile
     git \
     vim \
     curl \
