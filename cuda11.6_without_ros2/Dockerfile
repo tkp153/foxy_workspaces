@@ -71,6 +71,8 @@ RUN pip3 install -r requirements.txt \
     && mkdir tools \
     && cd tools 
 
+RUN git clone https://github.com/tkp153/openpifpaf_ros2.git
+
 RUN  add-apt-repository ppa:mattrose/terminator \
     &&  apt update -y \
     &&  apt install -y terminator\
