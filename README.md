@@ -7,7 +7,6 @@ In this package we need this specs and packages on your host machine
 - x11(X Windows System ver.11 )
 - NVIDIA container toolkit
 - Docker
-- AMD64 CPU
 
 
 ## How to use this package
