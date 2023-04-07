@@ -72,3 +72,6 @@ The base docker image is ***nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04(cu113) a
 
 >2.04(2022/11/16) <br> 1.add cuda 11.6 version dockerfile <br> 2.restore Kinect Azure SDK<br>3. reduce image size
 
+> 2.05(2023/4/7) <br> 1. add 2023Developer_HSR Dockerfiles <br> 2. add 2023Developer_HSR docker run bash script
+> 
+
