@@ -56,23 +56,32 @@ RUN ln -s /usr/bin/python3.8 /usr/bin/python
 
 ENV PATH = "/usr/local/${CUDA_VERSION}/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/${CUDA_VERSION}/lib64:$LD_LIBRARY_PATH"
+RUN pip3 install --upgrade pip \
+    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 
+# ROS installation (Noetic)
 
-# setup realsense sdk
-RUN echo 'export http_proxy="http://<proxy>:<port>" '
-RUN  apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE ||  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-RUN  add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
-RUN  apt install -y --no-install-recommends \
-    librealsense2* \
+# setup sources.list
+RUN echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros1-latest.list
+
+# setup keys
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+
+# setup environment
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+ENV ROS_DISTRO noetic
+
+# install ros packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-ros-core=1.5.0-1* \
     && rm -rf /var/lib/apt/lists/*
+
 
 COPY requirements.txt ${PWD}
-RUN pip3 install -r requirements.txt \
-    && mkdir tools \
-    && cd tools 
+RUN pip3 install -r requirements.txt 
 
-RUN  add-apt-repository ppa:mattrose/terminator \
-    &&  apt update -y \
-    &&  apt install -y terminator\
-    && rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/facebookresearch/detectron2.git
+RUN python -m pip install -e detectron2
 
