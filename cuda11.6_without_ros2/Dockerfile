@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.6.0-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.6.2-cudnn8-devel-ubuntu20.04
 
 ARG CUDA_VERSION=cuda-11.6
 ARG PYTHON_VERSION=python3
@@ -63,7 +63,7 @@ RUN echo 'export http_proxy="http://<proxy>:<port>" '
 RUN  apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE ||  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
 RUN  add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
 RUN  apt install -y --no-install-recommends \
-    librealsense2* \
+    librealsense2-dkms* librealsense2-utils  librealsense2-dev librealsense2-dbg \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ${PWD}
