@@ -63,15 +63,19 @@ RUN echo 'export http_proxy="http://<proxy>:<port>" '
 RUN  apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE ||  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
 RUN  add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
 RUN  apt install -y --no-install-recommends \
-    librealsense2-dkms* librealsense2-utils  librealsense2-dev librealsense2-dbg \
+    librealsense2 \
+    librealsense2-dkms\
+    librealsense2-utils\
+    librealsense2-dev\
+    librealsense2-udev-rules\
     && rm -rf /var/lib/apt/lists/*
+
 
 COPY requirements.txt ${PWD}
 RUN pip3 install -r requirements.txt \
     && mkdir tools \
     && cd tools 
 
-RUN git clone https://github.com/tkp153/openpifpaf_ros2.git
 
 RUN  add-apt-repository ppa:mattrose/terminator \
     &&  apt update -y \
