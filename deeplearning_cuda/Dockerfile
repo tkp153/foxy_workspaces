@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.6.0-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.6.2-cudnn8-devel-ubuntu20.04
 
 ARG CUDA_VERSION=cuda-11.6
 ARG PYTHON_VERSION=python3
